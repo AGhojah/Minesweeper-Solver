@@ -245,8 +245,8 @@ namespace MineSweeperBot
                     }
                     msg += "\n";
                 }
+                MessageBox.Show(msg);
             }
-            MessageBox.Show(msg);
         }
     }
 }
