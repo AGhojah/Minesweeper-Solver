@@ -22,3 +22,11 @@ C:\Users\Ghojah\Documents\Visual Studio 2013\Projects\LapTop Projects\Projects\M
 C:\Users\Ghojah\Documents\Visual Studio 2013\Projects\LapTop Projects\Projects\MineSweeperBot\MineSweeperBot\obj\Debug\MineSweeperBot.Form1.resources
 C:\Users\Ghojah\Documents\Visual Studio 2013\Projects\LapTop Projects\Projects\MineSweeperBot\MineSweeperBot\obj\Debug\MineSweeperBot.Properties.Resources.resources
 C:\Users\Ghojah\Documents\Visual Studio 2013\Projects\LapTop Projects\Projects\MineSweeperBot\MineSweeperBot\obj\Debug\MineSweeperBot.csproj.GenerateResource.Cache
+C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperBot.exe
+C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperBot.pdb
+C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\bin\Debug\MineSweeperBot.exe
+C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\bin\Debug\MineSweeperBot.pdb
+C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperBot.csprojResolveAssemblyReference.cache
+C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperBot.Form1.resources
+C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperBot.Properties.Resources.resources
+C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperBot.csproj.GenerateResource.Cache
