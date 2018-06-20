@@ -30,3 +30,4 @@ C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperB
 C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperBot.Form1.resources
 C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperBot.Properties.Resources.resources
 C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\obj\Debug\MineSweeperBot.csproj.GenerateResource.Cache
+C:\Users\Ghojah\Desktop\Minesweeper-Solver\MineSweeperBot\bin\Debug\MineSweeperBot.exe.config

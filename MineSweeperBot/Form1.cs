@@ -44,6 +44,8 @@ namespace MineSweeperBot
             this.TopMost = true;
             textBox3.Text = yMine.ToString();
             textBox4.Text = xMine.ToString();
+            textBox1.Text = Properties.Settings.Default.tb1;
+            textBox2.Text = Properties.Settings.Default.tb2;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -109,6 +111,10 @@ namespace MineSweeperBot
             if (on)
                 xxt.Abort();
             on = false;
+
+            Properties.Settings.Default.tb1 = textBox1.Text;
+            Properties.Settings.Default.tb2 = textBox2.Text;
+            Properties.Settings.Default.Save();
         }
 
         public void DoMouseClick()
@@ -191,7 +197,7 @@ namespace MineSweeperBot
 
         private void button4_Click(object sender, EventArgs e)
         {
-            
+            // TEXT BUTTON
             xMine = Convert.ToInt32(textBox4.Text);
             yMine = Convert.ToInt32(textBox3.Text);
             MessageBox.Show(xMine.ToString() + " " + yMine.ToString());
@@ -247,6 +253,12 @@ namespace MineSweeperBot
                 }
                 MessageBox.Show(msg);
             }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            ssc.DrawImage();
+            ssc.DrawLayout(pntr1, pntr2, xMine, yMine);
         }
     }
 }

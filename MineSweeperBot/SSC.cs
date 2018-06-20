@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 
 namespace MineSweeperBot
 {
@@ -78,6 +79,58 @@ namespace MineSweeperBot
             gfxScreenshot.CopyFromScreen(xOff, yOff, 0, 0, s, CopyPixelOperation.SourceCopy);
             bmpScreenshot.Save("Screenshot.png", ImageFormat.Png);
         }
+
+        public void DrawImage()
+        {
+            Random rnd = new Random(DateTime.Now.Second);
+            int w = 100;
+            int h = 100;
+            float penThickness = 20f;
+            Brush br;
+            Font myFont = new Font(FontFamily.GenericSansSerif,12f,FontStyle.Bold);
+            br = new SolidBrush(Color.FromArgb(rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255)));
+            Pen myPen = new Pen(br, penThickness); 
+            PointF txtPoint = new PointF(20f,20f);
+
+            var bmp = new Bitmap(w,h,PixelFormat.Format32bppArgb);
+            var gfx = Graphics.FromImage(bmp);
+            gfx.DrawRectangle(myPen, 0, 0, w, h);
+            gfx.DrawString("hello", myFont, br, txtPoint,StringFormat.GenericTypographic);
+            bmp.Save("Image.bmp", ImageFormat.Bmp);
+
+        }
+
+        public void DrawLayout(Point UpperLeft, Point BottomRight, int numOfCol, int numOfRaws)
+        {
+            Brush b = new SolidBrush(Color.Black);
+            int margin = 20;
+            Font myFont = new Font(FontFamily.GenericSansSerif, 18f, FontStyle.Bold);
+
+            float xInc = (float)(BottomRight.X - UpperLeft.X) / numOfCol;
+            float firstX = xInc / 2;
+
+            float yInc = (float)(BottomRight.Y - UpperLeft.Y) / numOfRaws;
+            float firstY = yInc / 2;
+
+            var bmp = new Bitmap((BottomRight.X - UpperLeft.X) + margin, (BottomRight.Y - UpperLeft.Y) + margin, PixelFormat.Format32bppArgb);
+            var gfx = Graphics.FromImage(bmp);
+
+            gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            for (int x = 1; x <= numOfCol; x++)
+            {
+                gfx.DrawString(x.ToString(), myFont, b, new PointF((xInc*(x-1) + firstX + margin), 0f), StringFormat.GenericTypographic);
+            }
+
+            gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
+            for (int y = 1; y <= numOfRaws; y++)
+            {
+                gfx.DrawString(y.ToString(), myFont, b, new PointF(0f, (yInc * (y - 1) + firstY + margin)), StringFormat.GenericTypographic);
+            }
+
+            bmp.Save("Layout.png", ImageFormat.Png);
+
+        }
+
         public double[] BoxDim(Point upper, Point lower, int xSquares, int ySquares)
         {
             double[] bb = new double[2];
