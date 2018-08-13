@@ -46,5 +46,17 @@ namespace MineSweeperBot.Properties {
                 this["tb2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("thesilenttv")]
+        public string channel {
+            get {
+                return ((string)(this["channel"]));
+            }
+            set {
+                this["channel"] = value;
+            }
+        }
     }
 }

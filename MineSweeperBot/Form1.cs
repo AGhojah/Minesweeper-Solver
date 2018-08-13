@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Threading;
+using GenericTwitchIRC;
 
 namespace MineSweeperBot
 {
@@ -27,6 +28,10 @@ namespace MineSweeperBot
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
+        private const uint MOUSEEVENTF_MIDDLEDOWN = 0x0020;
+        private const uint MOUSEEVENTF_MIDDLEUP = 0x0040;
+
+        TwitchIRC irc;
 
         Random rnd = new Random();
         int[,] boxesColorValueArray;
@@ -39,13 +44,60 @@ namespace MineSweeperBot
         public Form1()
         {
             InitializeComponent();
+            irc = new TwitchIRC();
+            irc.Connect();
+            irc.NewMessage += irc_NewMessage;
             TransparencyKey = Color.BlueViolet;
             //this.BackColor = Color.BlueViolet;
+
             this.TopMost = true;
             textBox3.Text = yMine.ToString();
             textBox4.Text = xMine.ToString();
             textBox1.Text = Properties.Settings.Default.tb1;
             textBox2.Text = Properties.Settings.Default.tb2;
+            tbChannel.Text = Properties.Settings.Default.channel;
+
+            pntr1 = ConvertStringToPoint(textBox1.Text);
+            pntr2 = ConvertStringToPoint(textBox2.Text);
+        }
+
+        private Point ConvertStringToPoint(string p)
+        {
+            if (p.StartsWith("{X="))
+            {
+                p = p.Replace("{X=", "");
+                p = p.Replace("Y=", "");
+                p = p.Replace("}", "");
+                string[] coords = p.Split(',');
+                int x = 0, y = 0;
+                int.TryParse(coords[0],out x);
+                int.TryParse(coords[1], out y);
+                return new Point(x, y);
+            }
+            return new Point(0, 0);
+        }
+
+        void irc_NewMessage(object source, NewMessageEventArgs e)
+        {
+
+            if (ChatManager.IsCommand(e.NewMessage[2]))
+            {
+                Point exc = ChatManager.TranslateCommand(e.NewMessage[2]);
+                int commandType = ChatManager.CommandType(e.NewMessage[2]);
+                if (exc.X > 0 && exc.Y > 0 && exc.X <= xMine && exc.Y <= yMine)
+                {
+                    float xBox = (float)(pntr2.X - pntr1.X) / xMine;
+                    float yBox = (float)(pntr2.Y - pntr1.Y) / yMine;
+                    float fx = pntr1.X + ((exc.X-1) * xBox) + xBox / 2;
+                    float fy = pntr1.Y + ((exc.Y-1) * yBox) + yBox / 2;
+                    if (commandType == 1)
+                        DoMouseClick((int)fx, (int)fy);
+                    else if (commandType == 2)
+                        DoRightClick((int)fx, (int)fy);
+                    else if (commandType == 3)
+                        DoMiddleClick((int)fx, (int)fy);
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -112,8 +164,15 @@ namespace MineSweeperBot
                 xxt.Abort();
             on = false;
 
+            if (irc.IsConnected())
+                irc.Disconnect();
+
             Properties.Settings.Default.tb1 = textBox1.Text;
             Properties.Settings.Default.tb2 = textBox2.Text;
+            if (tbChannel.Text != "")
+            {
+                Properties.Settings.Default.channel = tbChannel.Text;
+            }
             Properties.Settings.Default.Save();
         }
 
@@ -124,12 +183,28 @@ namespace MineSweeperBot
             int Y = Cursor.Position.Y;
             mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)X, (uint)Y, 0, 0);
         }
+        public void DoMouseClick(int X, int Y)
+        {
+            Cursor.Position = new Point(X, Y);
+            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, (uint)X, (uint)Y, 0, 0);
+        }
         public void DoRightClick()
         {
             //Call the imported function with the cursor's current position
             int X = Cursor.Position.X;
             int Y = Cursor.Position.Y;
             mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)X, (uint)Y, 0, 0);
+        }
+        public void DoRightClick(int X, int Y)
+        {
+            Cursor.Position = new Point(X, Y);
+            mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, (uint)X, (uint)Y, 0, 0);
+        }
+
+        public void DoMiddleClick(int X, int Y)
+        {
+            Cursor.Position = new Point(X, Y);
+            mouse_event(MOUSEEVENTF_MIDDLEDOWN | MOUSEEVENTF_MIDDLEUP, (uint)X, (uint)Y, 0, 0);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -182,13 +257,13 @@ namespace MineSweeperBot
                 {
                     xadd = Convert.ToInt32((ccc[0] / 2) + ccc[0] * cntr);
                     yadd = Convert.ToInt32((ccc[1] / 2) + ccc[1] * yctr);
-                    //Cursor.Position = new Point((pntr1.X + xadd), (pntr1.Y + yadd));
-                    //Thread.Sleep(20);
+                    Cursor.Position = new Point((pntr1.X + xadd), (pntr1.Y + yadd));
+                    Thread.Sleep(20);
                     //boxesColorValueArray[cntr, yctr] = (int)GetPixelColor(Cursor.Position.X, Cursor.Position.Y).R;
                     boxesColorValueArray[cntr, yctr] = (int)GetPixelColor(pntr1.X + xadd, pntr1.Y + yadd).R;
                     colorsString += boxesColorValueArray[cntr, yctr].ToString() + ", ";
-                    //Thread.Sleep(10);
-                    //DoRightClick();                    
+                    Thread.Sleep(10);
+                    DoRightClick();                    
                 }
             }
             colorsString += "Total boxes:" + boxesColorValueArray.Length.ToString();
@@ -259,6 +334,11 @@ namespace MineSweeperBot
         {
             ssc.DrawImage();
             ssc.DrawLayout(pntr1, pntr2, xMine, yMine);
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            irc.JoinChannel(tbChannel.Text);
         }
     }
 }

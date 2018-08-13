@@ -8,5 +8,8 @@
     <Setting Name="tb2" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="channel" Type="System.String" Scope="User">
+      <Value Profile="(Default)">thesilenttv</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
